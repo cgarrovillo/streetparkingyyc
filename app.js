@@ -8,8 +8,8 @@ const parkingRoute = require('./src/routes/parkingRoute')
 
 const port = process.env.PORT
 
-app.post('/parking', (req, res) => {
-  parkingRoute(req)
-})
+app.use('/parking', parkingRoute)
 
+//TODO: What is with bin/www ?
+//TODO: Proper way to Debug (easily turn off console.logs)
 http.createServer(app).listen(process.env.PORT)
