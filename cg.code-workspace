@@ -6,5 +6,8 @@
     {
       "path": "../express-generator"
     }
-  ]
+  ],
+  "settings": {
+    "debug.node.autoAttach": "on"
+  }
 }

@@ -1,15 +1,18 @@
-require('dotenv').config()
 const express = require('express')
-const http = require('http')
-const https = require('https')
+const compression = require('compression')
 const app = express()
 
 const parkingRoute = require('./src/routes/parkingRoute')
 
-const port = process.env.PORT
+/**
+ * Compress all responses;
+ * Include a Cache-control header with a response to bypass
+ */
+app.use(compression)
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.use('/parking', parkingRoute)
 
-//TODO: What is with bin/www ?
-//TODO: Proper way to Debug (easily turn off console.logs)
-http.createServer(app).listen(process.env.PORT)
+module.exports = app
