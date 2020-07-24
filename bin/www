@@ -1,9 +1,45 @@
 require('dotenv').config()
 const http = require('http')
 const https = require('https')
+
 const app = require('../app.js')
 
-/**
+const environment = {
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production',
+  DEV_DEBUG: 'debug',
+}
+
+/*
+ * Logging stuff
+ */
+const bunyan = require('bunyan')
+const { INFO, ERROR, DEBUG } = require('bunyan')
+const log = bunyan.createLogger({
+  name: 'openParkYYC',
+  stream: process.stdout,
+  level: 'info',
+})
+
+//If the environment is development, add a debug level too
+if (process.env.NODE_ENV === environment.DEVELOPMENT) {
+  log.level(DEBUG)
+}
+//If in prod, output to file
+else if (process.env.NODE_ENV === environment.PRODUCTION) {
+  log.addStream({
+    name: 'prodInfoToText',
+    path: '/logs/info',
+    level: INFO,
+  })
+  log.addStream({
+    name: 'prodErrorToText',
+    path: '/logs/errors',
+    level: ERROR,
+  })
+}
+
+/*
  * Get port from .env or set it to 3500.
  */
 const port = process.env.PORT || '3500'
@@ -11,7 +47,9 @@ app.set('port', port)
 
 const server = http.createServer(app)
 
-/**
+/*
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port)
+const addr = server.address()
+log.info(`Server started on ${addr.address}:${addr.port}`)

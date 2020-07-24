@@ -4,11 +4,11 @@ const app = express()
 
 const parkingRoute = require('./src/routes/parkingRoute')
 
-/**
+/*
  * Compress all responses;
  * Include a Cache-control header with a response to bypass
  */
-app.use(compression)
+// app.use(compression())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
