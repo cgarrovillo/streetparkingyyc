@@ -8,6 +8,9 @@
     }
   ],
   "settings": {
-    "debug.node.autoAttach": "on"
+    "debug.node.autoAttach": "on",
+    "files.associations": {
+      "www": "javascript"
+    }
   }
 }

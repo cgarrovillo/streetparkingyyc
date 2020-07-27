@@ -8,7 +8,7 @@
     "email": "me@christiang.dev"
   },
   "scripts": {
-    "dev": "nodemon ./bin/www | ./node_modules/.bin/bunyan",
+    "develop": "nodemon ./bin/www | ./node_modules/.bin/bunyan",
     "debug": "DEBUG=express:* nodemon app.js --trace-sync-io | ./node_modules/.bin/bunyan"
   },
   "license": "MIT",
