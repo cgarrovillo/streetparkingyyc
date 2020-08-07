@@ -3,7 +3,7 @@ const http = require('http')
 const https = require('https')
 
 const app = require('../app.js')
-const log = require('../util/loggingUtility')
+const log = require('../services/loggingUtility')
 
 /*
  * Get port from .env or set it to 3500.
@@ -18,6 +18,5 @@ const server = http.createServer(app)
  */
 server.listen(port)
 const addr = server.address()
-console.log(`Server started on ${addr.address}:${addr.port}`)
-log.info(`Server started on ${addr.address}:${addr.port}`)
 
+log.info(`Server started on ${addr.address}:${addr.port}`)

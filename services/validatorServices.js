@@ -1,31 +1,32 @@
 const { body, validationResult } = require('express-validator')
+const log = require('./loggingUtility')
 
-const zoneValidationRules = () => {
-  return [
-    body('parkingZone').isInt({
+const validZoneRules = async (req, res, next) => {
+  log.debug(`MW Chain: Validate Zone`)
+
+  await body('parkingZone')
+    .isInt({
       min: 1000,
       max: 9999,
-    }),
-  ]
+    })
+    .run(req)
+
+  next()
 }
 
 /* Validation Middleware */
 const validate = (req, res, next) => {
-  const errors = validationResult(req)
-  if (errors.isEmpty()) {
-    next()
-    return
+  log.debug(`MW Chain: Validate`)
+
+  const result = validationResult(req)
+  if (!result.isEmpty()) {
+    return res.status(400).json({ errors: result.array() })
   }
 
-  const extractedErrors = []
-  errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }))
-
-  return res.status(422).json({
-    errors: extractedErrors,
-  })
+  next()
 }
 
 module.exports = {
-  zoneValidationRules,
   validate,
+  validZoneRules,
 }

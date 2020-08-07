@@ -1,7 +1,11 @@
 const express = require('express')
 const compression = require('compression')
+const morgan = require('morgan')
+
 const app = express()
 
+const errors = require('./services/errorServices')
+const { validate } = require('./services/validatorServices')
 const parkingRoute = require('./routes/parkingRoute')
 
 /*
@@ -10,8 +14,11 @@ const parkingRoute = require('./routes/parkingRoute')
  */
 // app.use(compression())
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use(morgan('dev'))
 
 app.use('/parking', parkingRoute)
+
+app.use(errors)
 
 module.exports = app

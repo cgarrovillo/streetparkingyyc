@@ -39,7 +39,6 @@ if (process.env.NODE_ENV === environment.DEVELOPMENT) {
   log.info(
     `Unable to detect environment. \nSticking to default logging settings. (30-INFO, STDOUT)`
   )
-
 log.info(`Logging at level ${log.level()}.`)
 
 module.exports = log

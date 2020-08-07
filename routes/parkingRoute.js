@@ -1,18 +1,15 @@
 const express = require('express')
 
-const parkingServices = require('../services/parkingServices')
-const {
-  zoneValidationRules,
-  validate,
-} = require('../services/validatorServices')
+const { checkByParkingZone } = require('../services/parkingServices')
 
-const log = require('../util/loggingUtility')
+const { validate, validZoneRules } = require('../services/validatorServices')
 
-const checkByParkingZone = parkingServices.checkByParkingZone
+const log = require('../services/loggingUtility')
+
 const router = express.Router()
 
-router.post('/zone', zoneValidationRules(), validate, (req, res) => {
-  log.info(`${req.method} request made on ${req.originalUrl}`)
+// /parking/zone
+router.post('/zone', validZoneRules, validate, (req, res) => {
   checkByParkingZone(req.body.parkingZone)
     .then((response) => {
       res.send(response.data)
