@@ -1,5 +1,6 @@
 /**
  * Utility used to log various things in the project
+ * This is a wrapper for the Bunyan module which handles the logging capabilities.
  */
 
 const bunyan = require('bunyan')
@@ -17,7 +18,7 @@ const environment = {
   DEV_DEBUG: 'debug',
 }
 
-//If the environment is development, add a debug level too
+/* If the environment is development, add a debug level too */
 if (process.env.NODE_ENV === environment.DEVELOPMENT) {
   log.info(`Detected environment: ${process.env.NODE_ENV}`)
 
