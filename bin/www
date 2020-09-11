@@ -1,14 +1,11 @@
 require('dotenv').config()
 const http = require('http')
-const https = require('https')
-
-const app = require('../app.js')
-const log = require('../util/loggingUtility')
+const app = require('../index.js')
 
 /*
  * Get port from environment variables or set it to 3500.
  */
-const port = process.env.PORT || '3500'
+const port = 3000
 app.set('port', port)
 const server = http.createServer(app)
 
@@ -16,6 +13,3 @@ const server = http.createServer(app)
  * Listen on provided port, on all network interfaces.
  */
 server.listen(port)
-const addr = server.address()
-
-log.info(`Server started on ${addr.address}:${addr.port}`)

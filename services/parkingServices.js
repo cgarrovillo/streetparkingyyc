@@ -1,52 +1,56 @@
 const axios = require('axios').default
 
-const log = require('../util/loggingUtility')
 const { getEnforcedDays, isZoneParkable } = require('./timeServices')
-
 const socrataToken = process.env.SOCRATA_TOKEN
 
+/**
+ * Gets the Parking Zone from Open Calgary's API.
+ * Returns a Promise which contains the API call using axios()
+ * @param {*} zone
+ */
 async function getParkingZone(zone) {
-  let zonesArray = []
   const url = `https://data.calgary.ca/resource/rhkg-vwwp.json?parking_zone=${zone}`
-  const config = {
+  let config = {
     method: 'GET',
     timeout: 2000,
-    headers: {
+  }
+  if (socrataToken) {
+    config.headers = {
       'X-App-Token': socrataToken,
-    },
+    }
   }
 
-  zonesArray = await axios
+  /* Make an API Call to OpenData Calgary's API*/
+  return await axios
     .get(url, config)
     .then((response) => {
-      return response.data
+      return processZones(response.data)
     })
     .catch((error) => {
       //Request was made and server responded with status code != 2xx
       if (error.response) {
-        log.error(error.response)
-        return error.response
+        console.log(error.response.data)
+        return error.response.data
       }
       //Request was made but server did not respond
       else if (error.request) {
-        log.error(error.request)
-        return error.request
+        console.log(error.response.data)
+        return request.data
       }
     })
-  return processZones(zonesArray)
 }
 
 function processZones(array) {
   const zones = array.map((zone) => {
     // Check if the parking status is even 'Active', otherwise who cares
     if (zone.status !== 'Active') {
-      return null
+      return zone.status
     }
 
-    const enforcedDays = getEnforcedDays(zone.enforceable_time)
-    const isParkableNow = isZoneParkable(enforcedDays)
-
-    return { zone, enforcedDays, isParkableNow }
+    const enforcedOn = getEnforcedDays(zone.enforceable_time)
+    // const isParkableNow = isZoneParkable(enforcedDays)
+    // Craft and return the Response Object
+    return { zone, enforcedOn }
   })
 
   return zones

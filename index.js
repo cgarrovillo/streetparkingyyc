@@ -1,21 +1,20 @@
+// const serverless = require('serverless-http')
 const express = require('express')
 const moment = require('moment')
 
-const parkingRoute = require('./routes/parkingRoute')
-
-// Initialize
-const app = express()
-// Specify to express that request payloads will be parsed as JSON
-app.use(express.json())
+const parkingRoutes = require('./routes/parkingRoutes')
 
 // Globally set the UTC Offset of MomentJS to that of Calgary's UTC Offset.
 moment().utcOffset(-360)
-
 // Globally set the JSON format to the MomentJS instance's offset
 moment.fn.toJSON = function () {
   return this.format()
 }
 
-app.use('/parking', parkingRoute)
+const app = express()
+app.use(express.json())
+app.use('/parking', parkingRoutes)
+
+// module.exports.handler = serverless(app)
 
 module.exports = app
