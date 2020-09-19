@@ -13,6 +13,7 @@ moment.fn.toJSON = function () {
 
 const app = express()
 app.use(express.json())
+
 app.use('/parking', parkingRoutes)
 
 // module.exports.handler = serverless(app)

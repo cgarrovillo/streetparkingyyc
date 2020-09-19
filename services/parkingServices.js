@@ -24,7 +24,7 @@ async function getParkingZone(zone) {
   return await axios
     .get(url, config)
     .then((response) => {
-      return processZones(response.data)
+      return processArrayOfZones(response.data)
     })
     .catch((error) => {
       //Request was made and server responded with status code != 2xx
@@ -40,20 +40,21 @@ async function getParkingZone(zone) {
     })
 }
 
-function processZones(array) {
-  const zones = array.map((zone) => {
+function processArrayOfZones(array) {
+  return array.map((zone) => {
     // Check if the parking status is even 'Active', otherwise who cares
     if (zone.status !== 'Active') {
       return zone.status
     }
 
     const enforcedOn = getEnforcedDays(zone.enforceable_time)
-    // const isParkableNow = isZoneParkable(enforcedDays)
+    // const isParkableNow = isZoneParkable(enforcedOn)
     // Craft and return the Response Object
-    return { zone, enforcedOn }
+    return {
+      parking_zone: zone.parking_zone,
+      enforcedOn,
+    }
   })
-
-  return zones
 }
 
 module.exports = {

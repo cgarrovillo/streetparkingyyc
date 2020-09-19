@@ -27,16 +27,16 @@ function isZoneParkable(enforcedDays) {
 }
 
 function getEnforcedDays(time) {
-  let enforcedDays = []
+  let enforcedOn = []
   if (time.includes(',')) {
     let timeFrames = time.split(',')
     timeFrames.map((t) => {
-      enforcedDays.push(parseEnforcedDays(t))
+      enforcedOn.push(parseEnforcedDays(t))
     })
   } else {
-    enforcedDays.push(parseEnforcedDays(time))
+    enforcedOn.push(parseEnforcedDays(time))
   }
-  return enforcedDays
+  return enforcedOn
 }
 
 /**
