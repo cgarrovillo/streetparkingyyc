@@ -1,4 +1,4 @@
-// const serverless = require('serverless-http')
+const serverless = require('serverless-http')
 const express = require('express')
 const moment = require('moment')
 
@@ -16,6 +16,6 @@ app.use(express.json())
 
 app.use('/parking', parkingRoutes)
 
-// module.exports.handler = serverless(app)
+module.exports.handler = serverless(app)
 
 module.exports = app
