@@ -9,7 +9,7 @@
   },
   "scripts": {
     "develop-nodemon": "nodemon ./bin/www --trace-sync-io --verbose",
-    "develop": "serverless offline start",
+    "develop": "nodemon --exec \"serverless offline start\" --trace-sync-io ",
     "debug": "DEBUG=express:* serverless offline start",
     "deploy": "serverless deploy"
   },

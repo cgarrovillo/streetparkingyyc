@@ -1,6 +1,6 @@
-const axios = require('axios').default
+const axios = require("axios").default
 
-const { getEnforcedDays, isZoneParkable } = require('./timeServices')
+const { processTimes, checkZone } = require("./timeServices")
 const socrataToken = process.env.SOCRATA_TOKEN
 
 /**
@@ -11,22 +11,22 @@ const socrataToken = process.env.SOCRATA_TOKEN
 async function getParkingZone(zone) {
   const url = `https://data.calgary.ca/resource/rhkg-vwwp.json?parking_zone=${zone}`
   let config = {
-    method: 'GET',
+    method: "GET",
     timeout: 2000,
   }
   if (socrataToken) {
     config.headers = {
-      'X-App-Token': socrataToken,
+      "X-App-Token": socrataToken,
     }
   }
 
   /* Make an API Call to OpenData Calgary's API*/
   return await axios
     .get(url, config)
-    .then((response) => {
+    .then(response => {
       return processArrayOfZones(response.data)
     })
-    .catch((error) => {
+    .catch(error => {
       //Request was made and server responded with status code != 2xx
       if (error.response) {
         console.log(error.response.data)
@@ -41,18 +41,18 @@ async function getParkingZone(zone) {
 }
 
 function processArrayOfZones(array) {
-  return array.map((zone) => {
+  return array.map(zone => {
     // Check if the parking status is even 'Active', otherwise who cares
-    if (zone.status !== 'Active') {
+    if (zone.status !== "Active") {
       return zone.status
     }
 
-    const enforcedOn = getEnforcedDays(zone.enforceable_time)
-    // const isParkableNow = isZoneParkable(enforcedOn)
+    let result = checkZone(zone.enforceable_time)
+
     // Craft and return the Response Object
     return {
       parking_zone: zone.parking_zone,
-      enforcedOn,
+      ...result,
     }
   })
 }

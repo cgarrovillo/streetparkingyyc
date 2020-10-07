@@ -1,8 +1,9 @@
-const serverless = require('serverless-http')
-const express = require('express')
-const moment = require('moment')
+require("luxon").Settings.defaultZoneName = "America/Edmonton"
+const serverless = require("serverless-http")
+const express = require("express")
+const moment = require("moment")
 
-const parkingRoutes = require('./routes/parkingRoutes')
+const parkingRoutes = require("./routes/parkingRoutes")
 
 // Globally set the UTC Offset of MomentJS to that of Calgary's UTC Offset.
 moment().utcOffset(-360)
@@ -14,7 +15,7 @@ moment.fn.toJSON = function () {
 const app = express()
 app.use(express.json())
 
-app.use('/parking', parkingRoutes)
+app.use("/parking", parkingRoutes)
 
 module.exports.handler = serverless(app)
 

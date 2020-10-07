@@ -1,42 +1,50 @@
-const moment = require('moment')
+const moment = require("moment")
+const { DateTime, Interval } = require("luxon")
 
-function isZoneParkable(enforcedDays) {
-  let isParkable = false
-  let expires = null
-  //Get the date right now
-  const now = moment()
+function checkZone(time) {
+  const parsedTimes = processTimes(time)
+  let result = {
+    isEnforcedNow: null,
+    enforcedUntil: null,
+  }
 
-  //Check if today is an enforceable day
-  enforcedDays.map((range, index) => {
-    if (start.isSame(now, 'day')) {
-      //If today is an enforceable day, Check if the current time is in between the
-      //enforced day's start time & end time.
-      let end = enforcedDays.enforcedDaysEndTime[index]
-      if (now.isBetween(start, end)) {
-        //Return the time left
-        isParkable = true
-        expires = end
-        expiresIn = now.to(end)
+  parsedTimes.map(parsed => {
+    let rightNow = DateTime.local()
+    if (parsed.days.contains(rightNow)) {
+      let intersect = parsed.days.intersection(parsed.hours)
+      let difference = parsed.hours.e
+        .diffNow("minutes")
+        .toFormat("mm 'minutes' ")
+
+      if (intersect.isAfter(rightNow)) {
+        result.isEnforcedNow = true
+        result.enforcedUntil = parsed.hours.e
+        result.timeRemaining = difference
+      } else {
+        result.isEnforcedNow = false
+        result.enforcedUntil = parsed.hours.e
+        result.timeElapsed = difference
       }
     }
   })
 
-  //TODO
-  enforcedDays.map((day) => {})
-  return isParkable ? { isParkable, expires, expiresIn } : isParkable
+  return result
 }
 
-function getEnforcedDays(time) {
-  let enforcedOn = []
-  if (time.includes(',')) {
-    let timeFrames = time.split(',')
-    timeFrames.map((t) => {
-      enforcedOn.push(parseEnforcedDays(t))
+function processTimes(time) {
+  let _times = []
+
+  if (time.includes(",")) {
+    let timeRange = time.split(",")
+    timeRange.forEach(range => {
+      let _range = parseTime(range)
+      _times.push(_range)
     })
-  } else {
-    enforcedOn.push(parseEnforcedDays(time))
+    return _times
   }
-  return enforcedOn
+
+  _times.push(parseTime(time))
+  return _times
 }
 
 /**
@@ -45,12 +53,14 @@ function getEnforcedDays(time) {
  * for that array (ie. MON-FRI).
  * @param {string} time The time to parse.
  */
-function parseEnforcedDays(time) {
-  let enforcedDays = []
+function parseTime(time) {
+  const now = new Date()
+
+  time = time.trim()
   //ie. '0910-1750 MON-FRI'
-  const timeArray = time.split(' ')
-  const timeRange = timeArray[0].split('-') //0910-1750
-  const daysRange = timeArray[1].split('-') //MON-FRI
+  const timeArray = time.split(" ")
+  const timeRange = timeArray[0].split("-") //0910-1750
+  const daysRange = timeArray[1].split("-") //MON-FRI
 
   const startTime = timeRange[0] //0910
   const endTime = timeRange[1] //1750
@@ -62,29 +72,39 @@ function parseEnforcedDays(time) {
   const endTimeHour = endTime.substring(0, 2) //17
   const endTimeMinute = endTime.substring(2, 4) //50
 
-  //Convert the day into a value (0 being Sunday)
-  const startDayMoment = moment().day(startDay)
-  const endDayMoment = moment().day(endDay)
+  const weekRangeStart = moment().day(startDay)
+  const weekRangeEnd = moment().day(endDay)
+  const dayRangeStart = moment()
+    .hour(startTimeHour)
+    .minute(startTimeMinute)
+    .seconds(0)
+    .milliseconds(0)
+  const dayRangeEnd = moment()
+    .hour(endTimeHour)
+    .minute(endTimeMinute)
+    .seconds(0)
+    .milliseconds(0)
 
-  for (let i = startDayMoment.day(); i <= endDayMoment.day(); i++) {
-    const starts = moment()
-      .day(i)
-      .hour(startTimeHour)
-      .minute(startTimeMinute)
-      .second(0)
-    const ends = moment()
-      .day(i)
-      .hour(endTimeHour)
-      .minute(endTimeMinute)
-      .second(0)
+  const weekRangeInterval = Interval.fromDateTimes(
+    weekRangeStart.toDate(),
+    weekRangeEnd.toDate()
+  )
 
-    enforcedDays.push({ starts, ends })
+  const dayRangeInterval = Interval.fromDateTimes(
+    dayRangeStart.toDate(),
+    dayRangeEnd.toDate()
+  )
+
+  const count = weekRangeInterval.count("days")
+
+  return {
+    days: weekRangeInterval,
+    hours: dayRangeInterval,
+    count: count,
   }
-
-  return { range: timeArray[1], days: enforcedDays }
 }
 
 module.exports = {
-  isZoneParkable,
-  getEnforcedDays,
+  checkZone,
+  processTimes,
 }
