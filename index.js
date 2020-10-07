@@ -18,4 +18,4 @@ app.use('/parking', parkingRoutes)
 
 module.exports.handler = serverless(app)
 
-module.exports = app
+// module.exports = app

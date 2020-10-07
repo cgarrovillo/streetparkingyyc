@@ -10,7 +10,8 @@
   "scripts": {
     "develop-nodemon": "nodemon ./bin/www --trace-sync-io --verbose",
     "develop": "serverless offline start",
-    "debug": "DEBUG=express:* serverless offline start"
+    "debug": "DEBUG=express:* serverless offline start",
+    "deploy": "serverless deploy"
   },
   "license": "MIT",
   "dependencies": {
@@ -18,6 +19,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
+    "luxon": "^1.25.0",
     "moment": "^2.27.0",
     "serverless-http": "^2.5.0"
   },
