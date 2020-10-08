@@ -1,4 +1,3 @@
-require("luxon").Settings.defaultZoneName = "America/Edmonton"
 const serverless = require("serverless-http")
 const express = require("express")
 const moment = require("moment")

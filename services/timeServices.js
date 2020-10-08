@@ -1,5 +1,7 @@
 const moment = require("moment")
-const { DateTime, Interval } = require("luxon")
+const { DateTime, Interval, Settings } = require("luxon")
+
+Settings.defaultZoneName = "America/Edmonton"
 
 function checkZone(time) {
   const parsedTimes = processTimes(time)
@@ -18,11 +20,11 @@ function checkZone(time) {
 
       if (intersect.isAfter(rightNow)) {
         result.isEnforcedNow = true
-        result.enforcedUntil = parsed.hours.e
+        result.enforcedUntil = intersect.e
         result.timeRemaining = difference
       } else {
         result.isEnforcedNow = false
-        result.enforcedUntil = parsed.hours.e
+        result.enforcedUntil = intersect.e
         result.timeElapsed = difference
       }
     }
