@@ -2,15 +2,11 @@
   "folders": [
     {
       "path": "."
-    },
-    {
-      "path": "../express-generator"
     }
   ],
   "settings": {
-    "debug.node.autoAttach": "on",
     "files.associations": {
-      "www": "javascript"
+      "www": "typescript"
     }
   }
 }
