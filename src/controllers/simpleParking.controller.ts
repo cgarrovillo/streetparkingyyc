@@ -1,7 +1,12 @@
-// Services
 import { Context, Next } from 'koa'
+import { Duration } from 'luxon'
+
+// Services
 import { getParkingFromAPI } from '../services/parking.services'
 import { parseAdhocEnforceableTime, hasTimeRestrictionsNow } from '../services/time.services'
+
+// Types
+import APIResponse from '../types/response'
 
 /**
  * Controller for handling requests to /simple. Responds to requests with the "bare minimum" info on what a user of this API would be concerend about.
@@ -14,24 +19,32 @@ const simpleParkingController = async (ctx: Context, next: Next) => {
 
   const apiResponse = await getParkingFromAPI(zone)
   const parking = apiResponse.data
+  const park = parking[0]
 
-  let response = []
+  let res: APIResponse = {
+    zone: park.parking_zone,
+    status: park.status,
+    enforceable_time: park.enforceable_time,
+    canParkHere: false,
+  }
 
-  // For each parkingZone in parking, check if parking is currently enforced
-  parking.forEach(park => {
-    const time = parseAdhocEnforceableTime(park)
-    const _hasTimeRestrictionsNow = hasTimeRestrictionsNow(time)
+  // Check if the zone is even active. If not, return and respond with canParkHere = false
+  if (park.status != 'Active') {
+    res.canParkHere = false
+    return (ctx.body = res)
+  }
 
-    const res = {
-      zone: park.parking_zone,
-      enforceable_time: park.enforceable_time,
-      hasTimeRestrictions: _hasTimeRestrictionsNow,
+  // Check if there are any enforced time restrictions at the time of query
+  const time = parseAdhocEnforceableTime(park)
+  const hasTimeRestrictions = hasTimeRestrictionsNow(time)
+  if (hasTimeRestrictions) {
+    res.hasConditions = {
+      maxParkingTime: park.max_time,
     }
+  }
 
-    response = [...response, res]
-  })
-
-  ctx.body = response
+  res.canParkHere = true
+  return (ctx.body = res)
 }
 
 export default simpleParkingController

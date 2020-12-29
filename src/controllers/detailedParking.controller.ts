@@ -24,7 +24,7 @@ const detailedParkingController = async (ctx: Context, next: Next) => {
 
     const res = {
       parking_zone: park,
-      hasTimeRestrictions: _hasTimeRestrictionsNow,
+      hasTimeRestrictionsNow: _hasTimeRestrictionsNow,
       timeObjects: time,
     }
 

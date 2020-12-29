@@ -74,6 +74,10 @@ const parseTimeToken = (timeToken: string) => {
   }
 }
 
+/**
+ *  At the time of calling this function, checks for any active time restrictions against an array of Interval objects
+ * @param time Array of Interval objects with parsed enforceable_time
+ */
 const hasTimeRestrictionsNow = (time: Array<Interval>): boolean => {
   const now = DateTime.local()
 
