@@ -3,6 +3,9 @@ import { Context, Next } from 'koa'
 import { getParkingFromAPI } from '../services/parking.services'
 import { parseAdhocEnforceableTime, hasTimeRestrictionsNow } from '../services/time.services'
 
+// Types
+import { APIResponse } from '../types'
+
 /**
  * Controller for handling requests to /detailed. Responds to requests with a more detailed look in regards to a parking zone than /simple provides.
  * @param ctx Koa Context object
@@ -14,24 +17,36 @@ const detailedParkingController = async (ctx: Context, next: Next) => {
 
   const apiResponse = await getParkingFromAPI(zone)
   const parking = apiResponse.data
+  const park = parking[0] // Data we care about is the same across all zones with the same parking_zone
 
-  let response = []
+  let res: APIResponse = {
+    parking_zone: park.parking_zone,
+    status: park.status,
+    enforceable_time: park.enforceable_time,
+    canParkHere: false,
+  }
 
-  // For each parkingZone in parking, check if parking is currently enforced
-  parking.forEach(park => {
-    const time = parseAdhocEnforceableTime(park)
-    const _hasTimeRestrictionsNow = hasTimeRestrictionsNow(time)
+  // Check if the zone is even active. If not, return and respond with canParkHere = false
+  if (park.status != 'Active') {
+    res.canParkHere = false
+    return (ctx.body = res)
+  }
 
-    const res = {
-      parking_zone: park,
-      hasTimeRestrictionsNow: _hasTimeRestrictionsNow,
-      timeObjects: time,
+  // Check if there are any enforced time restrictions at the time of query
+  const time = parseAdhocEnforceableTime(park)
+  const hasTimeRestrictions = hasTimeRestrictionsNow(time)
+  if (hasTimeRestrictions) {
+    res.hasConditions = {
+      maxParkingTime: park.max_time,
     }
+  }
 
-    response = [...response, res]
-  })
-
-  ctx.body = response
+  res.canParkHere = true
+  res.details = {
+    timeRestrictions: time,
+    zone: park,
+  }
+  return (ctx.body = res)
 }
 
 export default detailedParkingController

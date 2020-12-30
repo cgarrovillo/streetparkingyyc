@@ -1,12 +1,11 @@
 import { Context, Next } from 'koa'
-import { Duration } from 'luxon'
 
 // Services
 import { getParkingFromAPI } from '../services/parking.services'
 import { parseAdhocEnforceableTime, hasTimeRestrictionsNow } from '../services/time.services'
 
 // Types
-import APIResponse from '../types/response'
+import { APIResponse } from '../types'
 
 /**
  * Controller for handling requests to /simple. Responds to requests with the "bare minimum" info on what a user of this API would be concerend about.
@@ -19,10 +18,10 @@ const simpleParkingController = async (ctx: Context, next: Next) => {
 
   const apiResponse = await getParkingFromAPI(zone)
   const parking = apiResponse.data
-  const park = parking[0]
+  const park = parking[0] // Data we care about is the same across all zones with the same parking_zone
 
   let res: APIResponse = {
-    zone: park.parking_zone,
+    parking_zone: park.parking_zone,
     status: park.status,
     enforceable_time: park.enforceable_time,
     canParkHere: false,
