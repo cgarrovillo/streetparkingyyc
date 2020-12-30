@@ -5,11 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "node",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "name": "nodemon",
+      "program": "${workspaceFolder}/src/server.ts",
       "request": "launch",
-      "name": "Launch Program",
+      "restart": true,
+      "runtimeExecutable": "nodemon",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/bin/www"
+      "type": "pwa-node"
     }
   ]
 }
