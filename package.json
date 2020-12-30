@@ -1,10 +1,10 @@
 {
-  "name": "openParkingYYC",
+  "name": "openparkingyyc",
   "version": "0.0.1",
   "main": "server.ts",
   "author": {
     "name": "Christian Garrovillo",
-    "url": "christiang.dev",
+    "url": "https://christiang.dev",
     "email": "me@christiang.dev"
   },
   "scripts": {
