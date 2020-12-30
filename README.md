@@ -1,4 +1,4 @@
-# openParkingYYC
+# StreetParkingYYC
  
 Small REST API that uses Open Data Calgary's parking API to see if a spot is good to park in.
 Based on the parking_zone, we can determine if a spot is open to be parked in based on the following conditions:
