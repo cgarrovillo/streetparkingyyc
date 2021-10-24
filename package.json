@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "@koa/router": "^10.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "dotenv": "^8.2.0",
     "koa": "^2.13.0",
     "luxon": "^1.25.0"
