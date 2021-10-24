@@ -1,5 +1,4 @@
 import { Context, Next } from 'koa'
-import { Duration } from 'luxon'
 
 // Services
 import { getParkingFromAPI } from '../services/parking.services'
@@ -23,9 +22,9 @@ const simpleParkingController = async (ctx: Context, next: Next) => {
 
   let res: APIResponse = {
     zone: park.parking_zone,
-    status: park.status,
     enforceable_time: park.enforceable_time,
     canParkHere: false,
+    conditions: [],
   }
 
   // Check if the zone is even active. If not, return and respond with canParkHere = false
@@ -36,13 +35,6 @@ const simpleParkingController = async (ctx: Context, next: Next) => {
 
   // Check if there are any enforced time restrictions at the time of query
   const time = parseAdhocEnforceableTime(park)
-  const hasTimeRestrictions = hasTimeRestrictionsNow(time)
-  if (hasTimeRestrictions) {
-    res.hasConditions = {
-      maxParkingTime: park.max_time,
-    }
-  }
-
   res.canParkHere = true
   return (ctx.body = res)
 }

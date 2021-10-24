@@ -1,11 +1,9 @@
 declare interface APIResponse {
   zone: string
-  status: string
-  enforceable_time: string
+  restrictions: {}
   canParkHere: boolean
-  hasConditions?: {
-    maxParkingTime?: number
-  }
+  timeLeft: string
+  conditions: []
 }
 
 export default APIResponse

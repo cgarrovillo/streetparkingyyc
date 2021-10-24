@@ -6,6 +6,7 @@ import detailedParkingController from './controllers/detailedParking.controller'
 
 const router = new Router()
 
+// /now
 router.get('/simple', simpleParkingController)
 router.get('/detailed', detailedParkingController)
 

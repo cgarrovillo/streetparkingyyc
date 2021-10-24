@@ -9,29 +9,30 @@ import { parseAdhocEnforceableTime, hasTimeRestrictionsNow } from '../services/t
  * @param next Koa Next object
  */
 const detailedParkingController = async (ctx: Context, next: Next) => {
-  const query = ctx.query
-  const zone = query.zone
+  ctx.body = 'Not implemented'
+  // const query = ctx.query
+  // const zone = query.zone
 
-  const apiResponse = await getParkingFromAPI(zone)
-  const parking = apiResponse.data
+  // const apiResponse = await getParkingFromAPI(zone)
+  // const parking = apiResponse.data
 
-  let response = []
+  // let response = []
 
-  // For each parkingZone in parking, check if parking is currently enforced
-  parking.forEach(park => {
-    const time = parseAdhocEnforceableTime(park)
-    const _hasTimeRestrictionsNow = hasTimeRestrictionsNow(time)
+  // // For each parkingZone in parking, check if parking is currently enforced
+  // parking.forEach(park => {
+  //   const time = parseAdhocEnforceableTime(park)
+  //   const _hasTimeRestrictionsNow = hasTimeRestrictionsNow(time)
 
-    const res = {
-      parking_zone: park,
-      hasTimeRestrictionsNow: _hasTimeRestrictionsNow,
-      timeObjects: time,
-    }
+  //   const res = {
+  //     parking_zone: park,
+  //     hasTimeRestrictionsNow: _hasTimeRestrictionsNow,
+  //     timeObjects: time,
+  //   }
 
-    response = [...response, res]
-  })
+  //   response = [...response, res]
+  // })
 
-  ctx.body = response
+  // ctx.body = response
 }
 
 export default detailedParkingController
