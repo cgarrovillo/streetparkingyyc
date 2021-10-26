@@ -1,8 +1,6 @@
 declare interface APIResponse {
   zone: string
-  restrictions: {}
-  canParkHere: boolean
-  timeLeft: string
+  zone_type: string
   conditions: []
 }
 

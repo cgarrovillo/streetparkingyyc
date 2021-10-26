@@ -4,19 +4,19 @@
   "main": "server.ts",
   "author": {
     "name": "Christian Garrovillo",
-    "url": "https://christiang.dev",
+    "url": "https://cgarrovillo.dev",
     "email": "me@christiang.dev"
   },
   "scripts": {
     "develop": "nodemon src/server.ts --trace-sync-io --verbose"
   },
-  "license": "MIT",
+  "private": true,
   "dependencies": {
     "@koa/router": "^10.0.0",
     "axios": "^0.19.2",
+    "date-fns": "^2.25.0",
     "dotenv": "^8.2.0",
-    "koa": "^2.13.0",
-    "luxon": "^1.25.0"
+    "koa": "^2.13.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

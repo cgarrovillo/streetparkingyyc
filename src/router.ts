@@ -1,13 +1,10 @@
 import Router = require('@koa/router')
 
 // Controllers
-import simpleParkingController from './controllers/simpleParking.controller'
-import detailedParkingController from './controllers/detailedParking.controller'
+import parkingZoneController from './controllers/v1/parkingZone.controller'
 
 const router = new Router()
 
-// /now
-router.get('/simple', simpleParkingController)
-router.get('/detailed', detailedParkingController)
+router.get('/api/v1/:zone_number', parkingZoneController)
 
 export default router
