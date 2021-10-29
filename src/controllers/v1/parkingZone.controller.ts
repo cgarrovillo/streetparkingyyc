@@ -1,10 +1,13 @@
 import { Context, Next } from 'koa'
 
+import { getParkingZone } from '../../helpers/parking.helpers'
+
 const parkingZoneController = async (ctx: Context, next: Next) => {
-  ctx.body = 'Not implemented'
+  const { zone_number } = ctx.params
 
   // USING HELPER
   // fetch parking_zone from API
+  const parking = getParkingZone(Number(zone_number))
 
   // USING SERVICE
   // check for status, if not active send response with zone_type: zone's status

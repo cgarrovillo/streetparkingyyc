@@ -105,3 +105,6 @@ dist
 
 # VSCode
 *.code-workspace
+
+# Typescript builds
+out

@@ -5,15 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "name": "nodemon",
-      "program": "${workspaceFolder}/src/server.ts",
-      "request": "launch",
-      "restart": true,
-      "runtimeExecutable": "nodemon",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "pwa-node"
+      "name": "Attach",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": ["<node_internals>/**", "node_modules", "server.ts"],
+      "type": "node",
+      "restart": true
     }
   ]
 }
