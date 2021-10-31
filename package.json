@@ -8,7 +8,7 @@
     "email": "me@christiang.dev"
   },
   "scripts": {
-    "dev": "nodemon --verbose --trace-sync-io src/server.ts",
+    "dev": "nodemon --verbose src/server.ts",
     "debug": "nodemon --exec \"node --inspect-brk=0.0.0.0:9229 --require ts-node/register src/server.ts\""
   },
   "private": true,
