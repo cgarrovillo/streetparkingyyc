@@ -1,11 +1,12 @@
 import Parking_Zone from '../types/parking'
 
-/**
- * Verifies that parking is Active & is a Parking Zone
- * @param parking_zone
- */
-export const validateParking = (parking_zone: Parking_Zone) => {
-  return parking_zone.status === 'Active' && parking_zone.zone_type === 'Parking Zone'
-}
+import { parseEnforceableTime } from '../helpers/time.helpers'
 
-export const determineParkingConditions = (parking: Parking_Zone[]) => {}
+export const determineTimeConstraints = (parking_zone: Parking_Zone) => {
+  // parse enforceable_time (determine enforceable time)
+  // parse parking_restrict_time & parking_restrict_type (determine restrictions)
+  // determine timeLeft time based on variables above AND max_time
+
+  //TODO: Put each fn into WebWorkers
+  const enforceableTimes = parseEnforceableTime(parking_zone.enforceable_time)
+}

@@ -1,7 +1,7 @@
 import { Context, Next } from 'koa'
 
-import { getParkingZone } from '../../helpers/parking.helpers'
-import { validateParking } from '../../services/parking.services'
+import { getParkingZone, validateParking } from '../../helpers/parking.helpers'
+import { determineTimeConstraints } from '../../services/parking.services'
 import Parking_Zone from '../../types/parking'
 import Response_Body from '../../types/response'
 
@@ -29,12 +29,10 @@ const parkingZoneController = async (ctx: Context, next: Next) => {
       return
     }
 
-    // USING SERVICE
-    // determineParkingConditions
-    // parse enforceable_time (determine enforceable time)
-    // parse parking_restrict_time & parking_restrict_type (determine restrictions)
-    // determine if good to park now based on variables above
-    // determine timeLeft time based on variables above AND max_time
+    determineTimeConstraints(parking_zone)
+
+    // determine if good to park now based on time constraints
+
     ctx.response.body = parking
   } catch (err) {
     console.error(err)

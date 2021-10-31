@@ -16,11 +16,15 @@ declare interface Parking_Zone {
 export type Parking_Zone_Zone_Type = 'Parking Zone' | 'Loading Zone' | 'VIP Zone' | 'Access Calgay Parking Zone'
 export type Parking_Zone_Stall_Type = 'parallel' | 'perpendicular' | 'angle'
 export type Parking_Zone_Status = 'Active' | 'Inactive' | 'Removed'
-
-export declare interface MultiLineString {
+export type MultiLineString = {
   type: 'MultiLineString'
   // Array of array of tuple
   coordinates: [[[string, string]]]
+}
+
+export declare interface Parking_Zone_Conditions {
+  enforceable_times: Interval[][]
+  max_time: string
 }
 
 export default Parking_Zone
