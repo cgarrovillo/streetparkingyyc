@@ -8,8 +8,8 @@ declare interface Parking_Zone {
   status: Parking_Zone_Status
   enforceable_time: string
   max_time: string
-  parking_restrict_type: string
-  parking_restrict_time: string
+  parking_restrict_type: 'none' | string
+  parking_restrict_time: 'none' | string
   line: MultiLineString
 }
 

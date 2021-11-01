@@ -1,7 +1,7 @@
 import { Context, Next } from 'koa'
 
 import { getParkingZone, validateParking } from '../../helpers/parking.helpers'
-import { determineTimeConstraints } from '../../services/parking.services'
+import { determineTimeConstraints } from '../../services/time.services'
 import Parking_Zone from '../../types/parking'
 import Response_Body from '../../types/response'
 
@@ -29,7 +29,8 @@ const parkingZoneController = async (ctx: Context, next: Next) => {
       return
     }
 
-    determineTimeConstraints(parking_zone)
+    const timeConstraints = determineTimeConstraints(parking_zone)
+    console.dir(timeConstraints)
 
     // determine if good to park now based on time constraints
 

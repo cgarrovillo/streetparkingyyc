@@ -1,4 +1,4 @@
-import { parse, startOfWeek, eachDayOfInterval, Interval } from 'date-fns'
+import { parse, startOfWeek, eachDayOfInterval, Interval, addMinutes } from 'date-fns'
 import { Time_Frame_Token } from '../types/time'
 
 /**
@@ -115,4 +115,14 @@ export const parseParkingRestrictTime = (parking_restrict_time: string, parking_
     restrictedTimes.push({ start: startTime, end: endTime })
   }
   return restrictedTimes
+}
+
+/**
+ * Parses the max_time by adding it to the timestamp at the time of this function's invocation.
+ * @param max_time
+ * @returns A JS Date representation of the max_time
+ */
+export const parseMaxTime = (max_time: string) => {
+  const maxTimeDate = addMinutes(new Date(), Number(max_time))
+  return maxTimeDate
 }
