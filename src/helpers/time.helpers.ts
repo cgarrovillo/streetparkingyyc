@@ -29,17 +29,17 @@ export const parseEnforceableTime = (enforceable_time: string) => {
 
     enforceableTimes.push(fullTimeframes)
   }
-  console.log(enforceableTimes)
   return enforceableTimes
 }
 
 /**
+ * Enforceable Time Parsing Helper.
  * Builds an Array of Time_Frame objects to make parsing easier to work with
  * @param enforceable_time
  * @returns An Array of Time_Frame objects
  */
 const tokenizeEnforceableTime = (enforceable_time: string) => {
-  const enforTimeStrings = enforceable_time.split(', ')
+  const enforTimeStrings = enforceable_time.split(',')
 
   const timeframes: Time_Frame_Token[] = []
   for (let i = 0; i < enforTimeStrings.length; i++) {
@@ -55,20 +55,21 @@ const tokenizeEnforceableTime = (enforceable_time: string) => {
       },
     }
 
-    const timesAndDays = enforTimeStrings[i].split(' ')
-    const times = timesAndDays[0]
-    const days = timesAndDays[1]
+    // .trim() is added to mitigate human errors of OpenData Calgary
+    const timesAndDays = enforTimeStrings[i].trim().split(' ')
+    const times = timesAndDays[0].trim()
+    const days = timesAndDays[1].trim()
 
     // time is always in HHmm-HHmm format (ie. 0910-1520)
     const startAndEndTimes = times.split('-')
-    frame.times.start = startAndEndTimes[0]
-    frame.times.end = startAndEndTimes[1]
+    frame.times.start = startAndEndTimes[0].trim()
+    frame.times.end = startAndEndTimes[1].trim()
 
     // day(s) are dynamic. (ie. Can be a range MON-FRI or singular SAT)
     // singular days mean that the first & last days are the same.
     const firstAndLastDays = days.split('-')
-    frame.days.first = firstAndLastDays[0]
-    frame.days.last = firstAndLastDays[1] || firstAndLastDays[0]
+    frame.days.first = firstAndLastDays[0].trim()
+    frame.days.last = firstAndLastDays[1] || firstAndLastDays[0].trim()
 
     timeframes.push(frame)
   }
@@ -77,6 +78,7 @@ const tokenizeEnforceableTime = (enforceable_time: string) => {
 }
 
 /**
+ * Enforceable Time Parsing Helper.
  * Builds an Array of days using the start and end strings of a Time_Frame_Token.
  * Note that this is accurate to the day of the week -- Hours and Minutes are NOT taken into account in this stage.
  * @param timeframe A Time_Frame_Token to build a range from
@@ -87,7 +89,30 @@ const buildTimeframeDays = (timeframe: Time_Frame_Token) => {
 
   const first = parse(timeframe.days.first, 'eee', weekStart)
   const last = parse(timeframe.days.last, 'eee', weekStart)
+
   const days = eachDayOfInterval({ start: first, end: last })
 
   return days
+}
+
+/**
+ * Parses parking_restrict_time & parking_restrict_type.
+ * These two properties are independent of days -- they are a constant regardless of which day of the week (unlike enforceable_time).
+ * @param parking_restrict_time
+ * @param parking_restrict_type
+ * @returns
+ */
+export const parseParkingRestrictTime = (parking_restrict_time: string, parking_restrict_type: string) => {
+  if (parking_restrict_type === 'none') return []
+
+  const restrictedTimes: Interval[] = []
+  const restrictTimeStrings = parking_restrict_time.split(' , ')
+  for (let i = 0; i < restrictTimeStrings.length; i++) {
+    const now = new Date()
+    const timerange = restrictTimeStrings[i].split(' - ')
+    const startTime = parse(timerange[0].trim(), 'HH:mm', now)
+    const endTime = parse(timerange[1].trim(), 'HH:mm', now)
+    restrictedTimes.push({ start: startTime, end: endTime })
+  }
+  return restrictedTimes
 }
