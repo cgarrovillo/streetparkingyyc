@@ -1,5 +1,6 @@
+import { Interval } from 'date-fns'
 /**
- * Used when
+ * Used when tokenizing enforceable_time fields to make it easier to work with.
  */
 export declare interface Time_Frame_Token {
   times: {
@@ -10,4 +11,10 @@ export declare interface Time_Frame_Token {
     first: string
     last: string
   }
+}
+
+export declare interface Time_Constraints {
+  enforceable_times: Interval[][]
+  restricted_times: Interval[]
+  max_time: Date
 }

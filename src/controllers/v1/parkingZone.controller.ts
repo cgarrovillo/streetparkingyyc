@@ -16,7 +16,7 @@ const parkingZoneController = async (req: Request, res: Response, next: NextFunc
     // even though it returns multiple parking_zones.
     const parking_zone: Parking_Zone = parking[0]
 
-    // don't continue if parking ISN'T active AND a Parking Zone
+    // don't continue if parking IS a parking zone but IS NOT Active
     const isValidParking = validateParking(parking_zone)
     if (!isValidParking) {
       const response: Response_Body = {
