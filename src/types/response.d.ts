@@ -4,6 +4,8 @@ declare interface Response_Body {
   zone: string
   status: Parking_Zone_Status
   zone_type: string
+  // TODO: Add time constraints field
+  // TODO: turn conditions into Object
   conditions: []
 }
 

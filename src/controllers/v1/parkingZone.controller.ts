@@ -1,15 +1,15 @@
-import { Context, Next } from 'koa'
+import { Request, Response, NextFunction } from 'express'
 
 import { getParkingZone, validateParking } from '../../helpers/parking.helpers'
 import { determineTimeConstraints } from '../../services/time.services'
 import Parking_Zone from '../../types/parking'
 import Response_Body from '../../types/response'
 
-const parkingZoneController = async (ctx: Context, next: Next) => {
-  const { zone_number } = ctx.params
+const parkingZoneController = async (req: Request, res: Response, next: NextFunction) => {
+  const { zone_number } = req.params
   try {
     const { data: parking } = await getParkingZone(Number(zone_number))
-    if (parking.length === 0) return (ctx.response.status = 204)
+    if (parking.length === 0) return res.sendStatus(204)
 
     // We assume Open Data Calgary's data integrity, using the first element as the source of truth.
     // This assumption is made based on their API using single queries for each parking property,
@@ -25,7 +25,7 @@ const parkingZoneController = async (ctx: Context, next: Next) => {
         zone_type: parking_zone.zone_type,
         conditions: [],
       }
-      ctx.response.body = response
+      res.send(response)
       return
     }
 
@@ -34,10 +34,10 @@ const parkingZoneController = async (ctx: Context, next: Next) => {
 
     // determine if good to park now based on time constraints
 
-    ctx.response.body = parking
+    res.send(parking)
   } catch (err) {
     console.error(err)
-    ctx.response.status = 500
+    next(err)
   }
 }
 
